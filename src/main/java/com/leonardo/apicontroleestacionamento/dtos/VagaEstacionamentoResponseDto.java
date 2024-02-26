@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class VagaEstacionamentoRequestDto implements Serializable {
+public class VagaEstacionamentoResponseDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotBlank(message = "Campo obrigatório")
@@ -27,9 +27,12 @@ public class VagaEstacionamentoRequestDto implements Serializable {
 
     @NotBlank(message = "Campo obrigatório")
     private String modeloCarro;
-
+    
     @NotBlank(message = "Campo obrigatório")
     private String corCarro;
+
+    @NotBlank(message = "Campo obrigatório")
+    private LocalDateTime dataRegistro;
 
     @NotBlank(message = "Campo obrigatório")
     private String nomeResponsavel;
