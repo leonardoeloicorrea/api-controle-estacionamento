@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.leonardo.apicontroleestacionamento.dtos.VagaEstacionamentoRequestDto;
@@ -41,6 +43,14 @@ public class VagaEstacionamentoService {
     public VagaEstacionamentoResponseDto buscarVagaEstacionamentoPorId(UUID id){
         VagaEstacionamentoModel vagaEstacionamentoModel = buscarVagaEstacionamentoModel(id);
         return converterModelParaDto(vagaEstacionamentoModel);
+    }
+
+    public Page<VagaEstacionamentoResponseDto> buscarTodasVagasEstacionamento(Pageable pageable){
+        return vagaEstacionamentoRepository.buscarTodasVagasEstacionamento(pageable).map(model -> {
+            VagaEstacionamentoResponseDto dto = new VagaEstacionamentoResponseDto();
+            BeanUtils.copyProperties(model, dto);
+            return dto;
+        });
     }
 
     private VagaEstacionamentoModel buscarVagaEstacionamentoModel (UUID id){

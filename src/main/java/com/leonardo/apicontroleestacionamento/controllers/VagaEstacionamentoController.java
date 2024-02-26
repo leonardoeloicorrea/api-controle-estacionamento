@@ -3,6 +3,10 @@ package com.leonardo.apicontroleestacionamento.controllers;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,5 +39,10 @@ public class VagaEstacionamentoController {
     @GetMapping(value = "{id}")
     public ResponseEntity<VagaEstacionamentoResponseDto> buscarVagaEstacionamentoModel (@PathVariable UUID id){
         return ResponseEntity.status(HttpStatus.OK).body(vagaEstacionamentoService.buscarVagaEstacionamentoPorId(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<VagaEstacionamentoResponseDto>> buscarTodasVagasEstacionamento(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(vagaEstacionamentoService.buscarTodasVagasEstacionamento(pageable));
     }
 }
