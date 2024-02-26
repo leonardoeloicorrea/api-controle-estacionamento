@@ -1,7 +1,6 @@
 package com.leonardo.apicontroleestacionamento.dtos;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
