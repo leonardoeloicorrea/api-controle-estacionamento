@@ -17,12 +17,15 @@ import com.leonardo.apicontroleestacionamento.repositories.VagaEstacionamentoRep
 import com.leonardo.apicontroleestacionamento.services.exceptions.DatabaseConflictException;
 import com.leonardo.apicontroleestacionamento.services.exceptions.ResourceNotFoundException;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class VagaEstacionamentoService {
 
     @Autowired
     private VagaEstacionamentoRepository vagaEstacionamentoRepository;
 
+    @Transactional
     public VagaEstacionamentoResponseDto salvarVagaEstacionamento(VagaEstacionamentoRequestDto vagaEstacionamentoRequestDto){
         if(vagaEstacionamentoRepository.existsByPlacaCarro(vagaEstacionamentoRequestDto.getPlacaCarro())){
             throw new DatabaseConflictException("Conflito: Placa do carro já está em uso!");
@@ -51,6 +54,16 @@ public class VagaEstacionamentoService {
             BeanUtils.copyProperties(model, dto);
             return dto;
         });
+    }
+
+    @Transactional
+    public VagaEstacionamentoResponseDto atualizarVagaEstacionamento(UUID id, VagaEstacionamentoRequestDto vagaEstacionamentoRequestDto){
+        VagaEstacionamentoModel model = buscarVagaEstacionamentoModel(id);
+        BeanUtils.copyProperties(vagaEstacionamentoRequestDto, model);
+        vagaEstacionamentoRepository.save(model);
+        VagaEstacionamentoResponseDto VagaResponseDto = new VagaEstacionamentoResponseDto();
+        BeanUtils.copyProperties(model, VagaResponseDto);
+        return VagaResponseDto;
     }
 
     private VagaEstacionamentoModel buscarVagaEstacionamentoModel (UUID id){
