@@ -66,6 +66,12 @@ public class VagaEstacionamentoService {
         return VagaResponseDto;
     }
 
+    @Transactional
+    public void deletarVagaEstacionamento(UUID id){
+        buscarVagaEstacionamentoModel(id);
+        vagaEstacionamentoRepository.deleteById(id);
+    }
+
     private VagaEstacionamentoModel buscarVagaEstacionamentoModel (UUID id){
         return vagaEstacionamentoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Vaga de estacionamento não encontrada!"));
     }
