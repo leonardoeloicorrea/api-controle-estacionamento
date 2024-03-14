@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,26 +34,31 @@ public class VagaEstacionamentoController {
     @Autowired
     private VagaEstacionamentoService vagaEstacionamentoService;
 
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @PostMapping
     public ResponseEntity<VagaEstacionamentoResponseDto> salvarVagaEstacionamento(@RequestBody @Valid VagaEstacionamentoRequestDto vagaEstacionamentoRequestDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(vagaEstacionamentoService.salvarVagaEstacionamento(vagaEstacionamentoRequestDto));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR', 'ROLE_USUARIO')")
     @GetMapping(value = "{id}")
     public ResponseEntity<VagaEstacionamentoResponseDto> buscarVagaEstacionamentoModel (@PathVariable UUID id){
         return ResponseEntity.status(HttpStatus.OK).body(vagaEstacionamentoService.buscarVagaEstacionamentoPorId(id));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR', 'ROLE_USUARIO')")
     @GetMapping
     public ResponseEntity<Page<VagaEstacionamentoResponseDto>> buscarTodasVagasEstacionamento(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(vagaEstacionamentoService.buscarTodasVagasEstacionamento(pageable));
     }
     
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @PutMapping(value = "{id}")
     public ResponseEntity<VagaEstacionamentoResponseDto> atualizarVagaEstacionamento(@PathVariable UUID id, @RequestBody @Valid VagaEstacionamentoRequestDto vagaEstacionamentoRequestDto){
         return ResponseEntity.status(HttpStatus.OK).body(vagaEstacionamentoService.atualizarVagaEstacionamento(id, vagaEstacionamentoRequestDto));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @DeleteMapping(value = "{id}")
     public ResponseEntity<Object> deletarVagaEstacionamento(@PathVariable UUID id){
         vagaEstacionamentoService.deletarVagaEstacionamento(id);
